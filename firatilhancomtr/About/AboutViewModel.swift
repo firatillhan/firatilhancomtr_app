@@ -10,8 +10,9 @@ class AboutViewModel {
     private(set) var about: AboutModel?
     
     func fetchAbout() {
-        let url = "\(Bundle.main.baseURL)?endpoint=hakkimda"
-        
+        let url = "https://\(Bundle.main.baseURL)?endpoint=hakkimda"
+        print(url)
+
         AF.request(url).responseData { [weak self] response in
             switch response.result {
             case .success(let data):

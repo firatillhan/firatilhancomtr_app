@@ -12,7 +12,8 @@ class AnasayfaViewModel {
     private(set) var anasayfa: AnasayfaModel?
     
     func fetchAnasayfa() {
-        let url = "\(Bundle.main.baseURL)?endpoint=anasayfa"
+        let url = "https://\(Bundle.main.baseURL)?endpoint=anasayfa"
+        print(url)
         AF.request(url).responseData { [weak self] response in
             switch response.result {
             case .success(let data):

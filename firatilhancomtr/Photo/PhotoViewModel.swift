@@ -31,11 +31,12 @@ class PhotoViewModel {
         }
         
         loading = true
-        var url = "\(Bundle.main.baseURL)?endpoint=foto&sayfa=\(currentPage)"
+        var url = "https://\(Bundle.main.baseURL)?endpoint=foto&sayfa=\(currentPage)"
         if let city = selectedCity {
             url += "&sehir=\(city)"
         }
-        
+        print(url)
+
         AF.request(url).responseData { [weak self] response in
             guard let self else { return }
             loading = false
