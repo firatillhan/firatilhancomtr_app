@@ -15,16 +15,70 @@ class AddPhotoViewController: UIViewController {
     @IBOutlet weak var photoLocationLabel: UITextField!
     @IBOutlet weak var photoCityLabel: UITextField!
 
-    
-    
+    private let addPhotoViewModel = AddPhotoViewModel()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        imageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tap:)))
+        imageView.addGestureRecognizer(tap)
+        bindViewModel()
+
+    }
+    @objc func imageTapped(tap: UITapGestureRecognizer) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
+        present(picker, animated: true)
+    }
+
+    @IBAction func photoAddButton(_ sender: Any) {
+        print("ekle tıklandı")
+        guard let image = imageView.image else {
+            print("Fotoğraf seçilmedi")
+            return
+        }
+        
+        let name = photoNameLabel.text ?? ""
+        let detail = photoDetailLabel.text ?? ""
+        let location = photoLocationLabel.text ?? ""
+        let city = photoCityLabel.text ?? ""
+        
+        addPhotoViewModel.addPhoto(image: image, name: name, detail: detail, location: location, city: city)
     }
     
+    private func bindViewModel() {
+        
+        addPhotoViewModel.onSuccess = { [weak self] in
+            guard let self else { return }
+            NotificationCenter.default.post(name: NSNotification.Name("PhotoAdded"), object: nil)
+            DispatchQueue.main.async {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+        
+        addPhotoViewModel.onError = { error in
+            print("Hata: \(error)")
+        }
+    }
+        
 
+}
 
-
+extension AddPhotoViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        if let image = info[.editedImage] as? UIImage {
+            imageView.image = image
+        }
+        dismiss(animated: true)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true)
+    }
 }

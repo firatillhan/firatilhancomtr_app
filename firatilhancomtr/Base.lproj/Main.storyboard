@@ -217,17 +217,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chose_picture" translatesAutoresizingMaskIntoConstraints="NO" id="eAO-1F-ep4">
-                                <rect key="frame" x="12" y="184" width="369" height="369"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="eAO-1F-ep4" secondAttribute="height" multiplier="1:1" id="Kia-pj-1II"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="12"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="VlN-KM-Tzz">
                                 <rect key="frame" x="12" y="565" width="369" height="158"/>
                                 <subviews>
@@ -253,6 +242,17 @@
                                     </textField>
                                 </subviews>
                             </stackView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chose_picture" translatesAutoresizingMaskIntoConstraints="NO" id="eAO-1F-ep4">
+                                <rect key="frame" x="12" y="184" width="369" height="369"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="eAO-1F-ep4" secondAttribute="height" multiplier="1:1" id="Kia-pj-1II"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="12"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="bqb-mc-lES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -267,7 +267,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Foto Ekle" id="fbP-bL-10b">
-                        <barButtonItem key="rightBarButtonItem" title="Ekle" id="jm2-Qf-dOd"/>
+                        <barButtonItem key="rightBarButtonItem" title="Ekle" id="jm2-Qf-dOd">
+                            <connections>
+                                <action selector="photoAddButton:" destination="q5l-gW-5g7" id="6rP-hL-qng"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="imageView" destination="eAO-1F-ep4" id="bvT-Yu-Wel"/>

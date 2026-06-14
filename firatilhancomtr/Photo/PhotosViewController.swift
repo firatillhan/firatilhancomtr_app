@@ -33,6 +33,13 @@ class PhotosViewController: UIViewController {
         let done = UIBarButtonItem(title: "Select", style: .done, target: self, action: #selector(citySelected))
         toolbar.setItems([done], animated: false)
         citiesTextField.inputAccessoryView = toolbar
+        NotificationCenter.default.addObserver(self, selector: #selector(photoAdded), name: NSNotification.Name("PhotoAdded"), object: nil)
+
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+ 
         
     }
     
@@ -75,6 +82,9 @@ class PhotosViewController: UIViewController {
                 photoViewModel.fetchPhotos(city: photoViewModel.selectedCity, newSearch: false)
             }
         }
+    }
+    @objc private func photoAdded() {
+        photoViewModel.fetchPhotos(city: photoViewModel.selectedCity, newSearch: true)
     }
     
 }
