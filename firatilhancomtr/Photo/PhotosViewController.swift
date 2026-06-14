@@ -87,6 +87,16 @@ class PhotosViewController: UIViewController {
         photoViewModel.fetchPhotos(city: photoViewModel.selectedCity, newSearch: true)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "details" {
+            let vc = segue.destination as! PhotoDetailsViewController
+            let index = sender as! Int
+            vc.photo = photoViewModel.photos[index]
+        }
+    }
+    
+    
+    
 }
 
 extension PhotosViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -105,6 +115,10 @@ extension PhotosViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let thumbnailSize = CGSize(width: cellWidth * scale, height: cellWidth * scale)
         cell.photoImageView.sd_setImage(with: url, placeholderImage: nil, options: [], context: [.imageThumbnailPixelSize: thumbnailSize])
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "details", sender: indexPath.row)
     }
 }
 extension PhotosViewController: UIPickerViewDelegate, UIPickerViewDataSource {

@@ -30,9 +30,11 @@ class AddPhotoViewModel {
             formData.append(Data(city.utf8), withName: "foto_sehir")
             formData.append(Data("foto_ekle".utf8), withName: "action")
         }, to: url)
+        
         .responseData { [weak self] response in
             switch response.result {
             case .success(let data):
+                print(String(data: data, encoding: .utf8) ?? "okunamadı")
                 do {
                     let result = try JSONDecoder().decode(AddPhotoResponse.self, from: data)
                     if result.basari == true {

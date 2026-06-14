@@ -10,6 +10,7 @@ import UIKit
 class AddPhotoViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var photoNameLabel: UITextField!
     @IBOutlet weak var photoDetailLabel: UITextField!
     @IBOutlet weak var photoLocationLabel: UITextField!
@@ -20,13 +21,30 @@ class AddPhotoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        containerView.backgroundColor = .clear
         // Do any additional setup after loading the view.
         imageView.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tap:)))
-        imageView.addGestureRecognizer(tap)
+        let tapImage = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tap:)))
+        imageView.addGestureRecognizer(tapImage)
         bindViewModel()
 
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        let tapKeyboard = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapKeyboard)
+    }
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            view.frame.origin.y = -keyboardSize.height
+        }
+    }
+
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        view.frame.origin.y = 0
+    }
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
     @objc func imageTapped(tap: UITapGestureRecognizer) {
         let picker = UIImagePickerController()
