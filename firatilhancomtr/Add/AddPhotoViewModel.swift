@@ -19,7 +19,7 @@ class AddPhotoViewModel {
             onError?("Fotoğraf dönüştürülemedi")
             return
         }
-        let url = "https://www.firatilhan.com.tr/add.php?action=foto_ekle"
+        let url = "https://\(Bundle.main.addURL)?action=foto_ekle"
         print("URL: \(url)")
 
         AF.upload(multipartFormData: { formData in

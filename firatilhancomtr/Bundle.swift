@@ -8,7 +8,14 @@
 import Foundation
 
 extension Bundle {
+    
     var baseURL: String {
         return infoDictionary?["BASE_URL"] as? String ?? ""
     }
+    
+    var addURL: String {
+        return infoDictionary?["ADD_URL"] as? String ?? ""
+    }
 }
+
+

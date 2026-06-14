@@ -15,6 +15,8 @@ class AnasayfaViewController: UIViewController {
         super.viewDidLoad()
         bindViewModel()
         viewModel.fetchAnasayfa()
+        let url = "https://\(Bundle.main.addURL)?action=foto_ekle"
+        print("URL: \(url)")
     }
     
     private func bindViewModel() {
