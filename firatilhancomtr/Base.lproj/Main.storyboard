@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <capability name="Map view configurations" minToolsVersion="14.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -224,7 +225,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chose_picture" translatesAutoresizingMaskIntoConstraints="NO" id="NED-Su-H1h">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="picture" translatesAutoresizingMaskIntoConstraints="NO" id="NED-Su-H1h">
                                 <rect key="frame" x="49" y="255.00000000000003" width="295" height="294.66666666666674"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="NED-Su-H1h" secondAttribute="height" multiplier="1:1" id="aej-UQ-N92"/>
@@ -293,11 +294,56 @@
                         <outlet property="photoLocationLabel" destination="WsR-zB-H7K" id="Ldx-qD-Yyy"/>
                         <outlet property="photoNameLabel" destination="SEb-qn-E59" id="ugV-7K-DXN"/>
                         <outlet property="photoTimeLabel" destination="Qpb-Sy-y0D" id="bxk-Ax-WF2"/>
+                        <segue destination="KRP-ar-mYm" kind="show" identifier="showMap" id="Ywa-UW-UvV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7sn-Yd-4Ai" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2789" y="1012"/>
+        </scene>
+        <!--Location Details View Controller-->
+        <scene sceneID="2Tv-b1-iGd">
+            <objects>
+                <viewController id="KRP-ar-mYm" customClass="LocationDetailsViewController" customModule="firatilhancomtr" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Rfb-9O-9NO">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BaU-KS-dNH">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="735"/>
+                                <standardMapConfiguration key="preferredConfiguration"/>
+                            </mapView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="IzD-Fm-zdn">
+                                <rect key="frame" x="269" y="172" width="112" height="32"/>
+                                <segments>
+                                    <segment title="Harita"/>
+                                    <segment title="Uydu"/>
+                                </segments>
+                                <connections>
+                                    <action selector="mapTypeChanged:" destination="KRP-ar-mYm" eventType="valueChanged" id="0UK-Tl-eZ6"/>
+                                </connections>
+                            </segmentedControl>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="iJs-cO-mmT"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="iJs-cO-mmT" firstAttribute="bottom" secondItem="BaU-KS-dNH" secondAttribute="bottom" id="9r7-cP-QAt"/>
+                            <constraint firstItem="IzD-Fm-zdn" firstAttribute="top" secondItem="iJs-cO-mmT" secondAttribute="top" id="Akd-2i-F26"/>
+                            <constraint firstItem="BaU-KS-dNH" firstAttribute="leading" secondItem="iJs-cO-mmT" secondAttribute="leading" id="Coe-nt-YF2"/>
+                            <constraint firstItem="iJs-cO-mmT" firstAttribute="trailing" secondItem="BaU-KS-dNH" secondAttribute="trailing" id="cwh-zE-7lT"/>
+                            <constraint firstItem="iJs-cO-mmT" firstAttribute="trailing" secondItem="IzD-Fm-zdn" secondAttribute="trailing" constant="12" id="eej-Wo-Qka"/>
+                            <constraint firstItem="BaU-KS-dNH" firstAttribute="top" secondItem="iJs-cO-mmT" secondAttribute="top" constant="-172" id="iPG-uc-jen"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="RDq-XO-jnZ"/>
+                    <connections>
+                        <outlet property="mapView" destination="BaU-KS-dNH" id="Z69-xe-Yra"/>
+                        <outlet property="myTypeSegment" destination="IzD-Fm-zdn" id="C0O-2P-edK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HmE-5b-7ja" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3684.7328244274809" y="1011.9718309859155"/>
         </scene>
         <!--Foto Ekle-->
         <scene sceneID="JJR-k4-zB4">
@@ -319,31 +365,39 @@
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DMs-4s-ybL">
-                                <rect key="frame" x="12" y="553" width="369" height="134"/>
+                                <rect key="frame" x="12" y="553" width="369" height="158"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="dQZ-Rb-tr5">
-                                        <rect key="frame" x="4" y="4" width="361" height="126"/>
+                                        <rect key="frame" x="4" y="4" width="361" height="150"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Ad" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Keb-Qq-1vU">
-                                                <rect key="frame" x="0.0" y="0.0" width="361" height="22.666666666666668"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="361" height="20.333333333333332"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Detay" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ptM-G9-v43">
-                                                <rect key="frame" x="0.0" y="34.666666666666629" width="361" height="22.333333333333329"/>
+                                                <rect key="frame" x="0.0" y="32.333333333333371" width="361" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Şehir" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HVI-JB-h8T">
-                                                <rect key="frame" x="0.0" y="69" width="361" height="22.666666666666671"/>
+                                                <rect key="frame" x="0.0" y="64.666666666666629" width="361" height="20.666666666666671"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Konum (filtreleme için. Sadece Şehir adı yazılacak)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JYa-O9-MmF">
-                                                <rect key="frame" x="0.0" y="103.66666666666663" width="361" height="22.333333333333329"/>
+                                                <rect key="frame" x="0.0" y="97.333333333333371" width="361" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kNp-Ob-9HL">
+                                                <rect key="frame" x="0.0" y="129.66666666666663" width="361" height="20.333333333333343"/>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="Haritadan Seç"/>
+                                                <connections>
+                                                    <action selector="mapChooseButton:" destination="q5l-gW-5g7" eventType="touchUpInside" id="NiR-KM-VSb"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                     </stackView>
                                 </subviews>
@@ -367,7 +421,7 @@
                             <constraint firstItem="bqb-mc-lES" firstAttribute="trailing" secondItem="DMs-4s-ybL" secondAttribute="trailing" constant="12" id="51k-ej-K5y"/>
                             <constraint firstItem="bqb-mc-lES" firstAttribute="trailing" secondItem="eAO-1F-ep4" secondAttribute="trailing" constant="12" id="5sR-Ih-7KV"/>
                             <constraint firstItem="eAO-1F-ep4" firstAttribute="top" secondItem="bqb-mc-lES" secondAttribute="top" id="AC1-g1-kGY"/>
-                            <constraint firstItem="bqb-mc-lES" firstAttribute="bottom" secondItem="DMs-4s-ybL" secondAttribute="bottom" constant="48" id="S1q-Vl-s9A"/>
+                            <constraint firstItem="bqb-mc-lES" firstAttribute="bottom" secondItem="DMs-4s-ybL" secondAttribute="bottom" constant="24" id="S1q-Vl-s9A"/>
                             <constraint firstItem="eAO-1F-ep4" firstAttribute="leading" secondItem="bqb-mc-lES" secondAttribute="leading" constant="12" id="VX9-xd-Gvj"/>
                             <constraint firstItem="DMs-4s-ybL" firstAttribute="top" secondItem="eAO-1F-ep4" secondAttribute="bottom" constant="12" id="dct-fT-tY2"/>
                             <constraint firstItem="DMs-4s-ybL" firstAttribute="leading" secondItem="bqb-mc-lES" secondAttribute="leading" constant="12" id="w1N-As-HM4"/>
@@ -387,11 +441,56 @@
                         <outlet property="photoDetailLabel" destination="ptM-G9-v43" id="XLK-GN-Aje"/>
                         <outlet property="photoLocationLabel" destination="JYa-O9-MmF" id="Zas-eQ-I7T"/>
                         <outlet property="photoNameLabel" destination="Keb-Qq-1vU" id="hlP-L3-Z6Z"/>
+                        <segue destination="dpb-H8-vXM" kind="show" identifier="locationChoose" id="p8D-v8-TRd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gsr-1C-T4Q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2790" y="330"/>
+        </scene>
+        <!--Location Choose View Controller-->
+        <scene sceneID="PC8-YY-BQR">
+            <objects>
+                <viewController id="dpb-H8-vXM" customClass="LocationChooseViewController" customModule="firatilhancomtr" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="x8Q-uA-3hP">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="09b-Rp-wAF">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="735"/>
+                                <standardMapConfiguration key="preferredConfiguration"/>
+                            </mapView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="p9k-c4-uAI">
+                                <rect key="frame" x="269" y="172" width="112" height="32"/>
+                                <segments>
+                                    <segment title="Harita"/>
+                                    <segment title="Uydu"/>
+                                </segments>
+                                <connections>
+                                    <action selector="mapTypeChanged:" destination="dpb-H8-vXM" eventType="valueChanged" id="Ulg-h8-YVR"/>
+                                </connections>
+                            </segmentedControl>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="D9A-dI-bTN"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="D9A-dI-bTN" firstAttribute="trailing" secondItem="p9k-c4-uAI" secondAttribute="trailing" constant="12" id="BIK-3I-hFg"/>
+                            <constraint firstItem="D9A-dI-bTN" firstAttribute="bottom" secondItem="09b-Rp-wAF" secondAttribute="bottom" id="CmB-8N-uPX"/>
+                            <constraint firstItem="p9k-c4-uAI" firstAttribute="top" secondItem="D9A-dI-bTN" secondAttribute="top" id="PAu-NT-6bm"/>
+                            <constraint firstItem="09b-Rp-wAF" firstAttribute="leading" secondItem="D9A-dI-bTN" secondAttribute="leading" id="q8e-zz-EsM"/>
+                            <constraint firstItem="09b-Rp-wAF" firstAttribute="top" secondItem="D9A-dI-bTN" secondAttribute="top" constant="-172" id="qfI-Ke-qRq"/>
+                            <constraint firstItem="09b-Rp-wAF" firstAttribute="trailing" secondItem="D9A-dI-bTN" secondAttribute="trailing" id="wL6-yf-IDe"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="xNQ-HM-fta"/>
+                    <connections>
+                        <outlet property="mapTypeSegment" destination="p9k-c4-uAI" id="VWn-d6-cTw"/>
+                        <outlet property="mapView" destination="09b-Rp-wAF" id="PJ5-hD-6YL"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="chU-fw-PJN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3684.7328244274809" y="329.57746478873241"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="3Rc-wr-QpP">
@@ -437,6 +536,7 @@
         <image name="house" catalog="system" width="128" height="104"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="photo" catalog="system" width="128" height="93"/>
+        <image name="picture" width="1254" height="1254"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

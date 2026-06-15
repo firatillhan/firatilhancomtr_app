@@ -13,7 +13,7 @@ class AddPhotoViewModel {
     var onSuccess: (() -> Void)?
     var onError: ((String) -> Void)?
 
-    func addPhoto(image: UIImage, name: String, detail: String, location: String, city: String) {
+    func addPhoto(image: UIImage, name: String, detail: String, location: String, city: String,lat: Double?, lng: Double?) {
         
         guard let imageData = image.jpegData(compressionQuality: 0.3) else {
             onError?("Fotoğraf dönüştürülemedi")
@@ -27,6 +27,13 @@ class AddPhotoViewModel {
             formData.append(Data(name.utf8), withName: "foto_ad")
             formData.append(Data(detail.utf8), withName: "foto_detay")
             formData.append(Data(location.utf8), withName: "foto_konum")
+            if let lat = lat {
+                formData.append(Data("\(lat)".utf8), withName: "foto_enlem")
+            }
+            if let lng = lng {
+                formData.append(Data("\(lng)".utf8), withName: "foto_boylam")
+            }
+            
             formData.append(Data(city.utf8), withName: "foto_sehir")
             formData.append(Data("foto_ekle".utf8), withName: "action")
         }, to: url)

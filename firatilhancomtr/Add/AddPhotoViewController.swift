@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MapKit
 
 class AddPhotoViewController: UIViewController {
 
@@ -17,7 +18,7 @@ class AddPhotoViewController: UIViewController {
     @IBOutlet weak var photoCityLabel: UITextField!
 
     private let addPhotoViewModel = AddPhotoViewModel()
-
+    var selectedCoordinate: CLLocationCoordinate2D?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,9 +67,22 @@ class AddPhotoViewController: UIViewController {
         let location = photoLocationLabel.text ?? ""
         let city = photoCityLabel.text ?? ""
         
-        addPhotoViewModel.addPhoto(image: image, name: name, detail: detail, location: location, city: city)
+        addPhotoViewModel.addPhoto(image: image, name: name, detail: detail, location: location, city: city,lat: selectedCoordinate?.latitude, lng: selectedCoordinate?.longitude
+)
     }
     
+    @IBAction func mapChooseButton(_ sender: Any) {
+        performSegue(withIdentifier: "locationChoose", sender: nil)
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "locationChoose" {
+            let vc = segue.destination as! LocationChooseViewController
+            vc.onLocationSelected = { [weak self] locationName in
+                self?.photoLocationLabel.text = locationName
+                self?.selectedCoordinate = vc.selectedCoordinate
+            }
+        }
+    }
     private func bindViewModel() {
         
         addPhotoViewModel.onSuccess = { [weak self] in

@@ -161,6 +161,7 @@
 				DEVELOPMENT_TEAM = S849W7DL9F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = firatilhancomtr/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Konumunuzu haritada göstermek için";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -194,6 +195,7 @@
 				DEVELOPMENT_TEAM = S849W7DL9F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = firatilhancomtr/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Konumunuzu haritada göstermek için";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

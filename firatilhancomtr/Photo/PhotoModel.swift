@@ -10,7 +10,8 @@ struct PhotoModel: Codable,Sendable {
     let photoLocation: String
     let photoTime: String
     let photoCity: String
-
+    let photoLat: String?
+    let photoLng: String?
     
     enum CodingKeys: String, CodingKey {
         case photoName = "foto_ad"
@@ -19,6 +20,8 @@ struct PhotoModel: Codable,Sendable {
         case photoLocation = "foto_konum"
         case photoTime = "foto_zaman"
         case photoCity = "foto_sehir"
+        case photoLat = "foto_enlem"
+        case photoLng = "foto_boylam"
     }
 }
 

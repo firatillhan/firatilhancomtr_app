@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import MapKit
 
 class PhotoDetailsViewController: UIViewController {
 
@@ -29,6 +30,11 @@ class PhotoDetailsViewController: UIViewController {
         photoDetailLabel.text = photo.photoDetail
         photoLocationLabel.text = "📍 \(photo.photoLocation)"
         photoCityLabel.text = photo.photoCity
+        photoLocationLabel.isUserInteractionEnabled = false
+        if photo.photoLat != nil {
+            photoLocationLabel.textColor = .systemBlue
+            photoLocationLabel.isUserInteractionEnabled = true
+        }
         
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -43,6 +49,11 @@ class PhotoDetailsViewController: UIViewController {
         let pinch = UIPinchGestureRecognizer(target: self, action: #selector(pinchGesture))
         imageView.addGestureRecognizer(pinch)
         imageView.isUserInteractionEnabled = true
+        
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(locationTapped))
+        photoLocationLabel.addGestureRecognizer(tap)
+        
         
     }
     
@@ -59,6 +70,14 @@ class PhotoDetailsViewController: UIViewController {
             setLabelsHidden(false)
         }
     }
+    @objc private func locationTapped() {
+        print("location label tıklandı")
+        guard photo?.photoLat != nil else {
+                print("koordinat yok")
+                return
+            }
+        performSegue(withIdentifier: "showMap", sender: nil)
+    }
 
     private func setLabelsHidden(_ hidden: Bool) {
         photoNameLabel.isHidden = hidden
@@ -68,4 +87,15 @@ class PhotoDetailsViewController: UIViewController {
         photoDetailLabel.isHidden = hidden
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showMap" {
+            let vc = segue.destination as! LocationDetailsViewController
+            if let latStr = photo?.photoLat, let lngStr = photo?.photoLng,
+               let lat = Double(latStr), let lng = Double(lngStr) {
+                vc.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+                vc.locationName = photo?.photoLocation
+            }
+        }
+    }
+    
 }
