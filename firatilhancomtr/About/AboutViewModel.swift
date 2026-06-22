@@ -3,12 +3,10 @@ import Alamofire
 import UIKit
 
 class AboutViewModel {
-    
-    var onSuccess: (() -> Void)?
-    var onError: ((String) -> Void)?
-    
+
     private(set) var about: AboutModel?
-    
+    var onStateChanged: ((State) -> Void)?
+
     func fetchAbout() {
         let url = "https://\(Bundle.main.baseURL)?endpoint=hakkimda"
         print(url)
@@ -20,16 +18,16 @@ class AboutViewModel {
                     let result = try JSONDecoder().decode(AboutModel.self, from: data)
                     DispatchQueue.main.async {
                         self?.about = result
-                        self?.onSuccess?()
+                        self?.onStateChanged?(.success)
                     }
                 } catch {
                     DispatchQueue.main.async {
-                        self?.onError?("Parse error: \(error.localizedDescription)")
+                        self?.onStateChanged?(.error("Parse hatası: \(error.localizedDescription)"))
                     }
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    self?.onError?(error.localizedDescription)
+                    self?.onStateChanged?(.error(error.localizedDescription))
                 }
             }
         }

@@ -3,8 +3,8 @@ import Foundation
 import Alamofire
 class PhotoViewModel {
     
-    var onSuccess: (() -> Void)?
-    var onError: ((String) -> Void)?
+    var onStateChanged: ((State) -> Void)?
+
     
     private(set) var photos: [PhotoModel] = []
     private(set) var cities: [String] = []
@@ -47,18 +47,14 @@ class PhotoViewModel {
                     self.photos += result.photos
                     self.cities = result.cities
                     self.totalPage = result.totalPage
-                    DispatchQueue.main.async {
-                        self.onSuccess?()
-                    }
+                    self.onStateChanged?(.success)
+                    
                 } catch {
-                    DispatchQueue.main.async {
-                        self.onError?("Parse error: \(error.localizedDescription)")
-                    }
+                    self.onStateChanged?(.error(error.localizedDescription))
                 }
             case .failure(let error):
-                DispatchQueue.main.async {
-                    self.onError?(error.localizedDescription)
-                }
+                self.onStateChanged?(.error(error.localizedDescription))
+
             }
         }
     }

@@ -10,13 +10,13 @@ import Alamofire
 import UIKit
 
 class AddPhotoViewModel {
-    var onSuccess: (() -> Void)?
-    var onError: ((String) -> Void)?
+   
+    var onStateChanged: ((State) -> Void)?
 
     func addPhoto(image: UIImage, name: String, detail: String, location: String, city: String,lat: Double?, lng: Double?) {
         
         guard let imageData = image.jpegData(compressionQuality: 0.3) else {
-            onError?("Fotoğraf dönüştürülemedi")
+            onStateChanged?(.error("Fotoğraf dönüştürülemedi"))
             return
         }
         let url = "https://\(Bundle.main.addURL)?action=foto_ekle"
@@ -45,23 +45,15 @@ class AddPhotoViewModel {
                 do {
                     let result = try JSONDecoder().decode(AddPhotoResponse.self, from: data)
                     if result.basari == true {
-                        DispatchQueue.main.async {
-                            self?.onSuccess?()
-                        }
+                        self?.onStateChanged?(.success)
                     } else {
-                        DispatchQueue.main.async {
-                            self?.onError?(result.hata ?? "Bilinmeyen hata")
-                        }
+                        self?.onStateChanged?(.error("Bilinmeyen hata"))
                     }
                 } catch {
-                    DispatchQueue.main.async {
-                        self?.onError?("Parse hatası: \(error.localizedDescription)")
-                    }
+                    self?.onStateChanged?(.error("Parse hatası: \(error.localizedDescription)"))
                 }
             case .failure(let error):
-                DispatchQueue.main.async {
-                    self?.onError?(error.localizedDescription)
-                }
+                self?.onStateChanged?(.error(error.localizedDescription))
             }
         }
     }

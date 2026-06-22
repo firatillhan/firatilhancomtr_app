@@ -17,15 +17,21 @@ class AboutViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        viewModel.onSuccess = { [weak self] in
-            guard let self else { return }
-            aboutTitle.text = viewModel.title
-            aboutContent.text = viewModel.content
-        }
         
-        viewModel.onError = { error in
-            print("Error: \(error)")
+        viewModel.onStateChanged = { state in
+            switch state {
+            case .success:
+                self.ekraniGuncelle()
+            case .error(let message):
+                print(message)
+                
+            }
         }
+    }
+    
+    private func ekraniGuncelle() {
+        aboutTitle.text = viewModel.title
+        aboutContent.text = viewModel.content
     }
 }
 

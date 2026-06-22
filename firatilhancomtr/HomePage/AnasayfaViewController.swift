@@ -16,19 +16,28 @@ class AnasayfaViewController: UIViewController {
         bindViewModel()
         viewModel.fetchAnasayfa()
     }
+
     
-    private func bindViewModel() {
-        viewModel.onSuccess = { [weak self] in
-            guard let self else { return }
-            anasayfaBaslik.text = viewModel.baslik
-            anasayfaIcerik.text = viewModel.icerik
-            anasayfaFoto.sd_setImage(with: viewModel.fotoURL)
+    private func bindViewModel(){
+        viewModel.onStateChanged = { [weak self] state in
+                switch state {
+                case .success:
+                    self!.ekraniGuncelle()
+                case .error(let message):
+                    print(message)
+            }
         }
-        
-        viewModel.onError = { hata in
-            print("Hata: \(hata)")
-        }
+        viewModel.fetchAnasayfa()
+
     }
+    
+    private func ekraniGuncelle(){
+        anasayfaBaslik.text = viewModel.baslik
+        anasayfaIcerik.text = viewModel.icerik
+        anasayfaFoto.sd_setImage(with: viewModel.fotoURL)
+    }
+    
+    
 }
 
 

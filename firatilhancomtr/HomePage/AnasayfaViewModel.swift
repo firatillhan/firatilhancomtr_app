@@ -2,12 +2,10 @@
 import Alamofire
 import SDWebImage
 
-
-
 class AnasayfaViewModel {
     
-    var onSuccess: (() -> Void)?
-    var onError: ((String) -> Void)?
+
+    var onStateChanged: ((State) -> Void)?
     
     private(set) var anasayfa: AnasayfaModel?
     
@@ -21,17 +19,13 @@ class AnasayfaViewModel {
                     let result = try JSONDecoder().decode(AnasayfaModel.self, from: data)
                     DispatchQueue.main.async {
                         self?.anasayfa = result
-                        self?.onSuccess?()
+                        self?.onStateChanged?(.success)
                     }
                 } catch {
-                    DispatchQueue.main.async {
-                        self?.onError?("Parse hatası: \(error.localizedDescription)")
-                    }
+                    self?.onStateChanged?(.error("Parse hatası: \(error.localizedDescription)"))
                 }
             case .failure(let error):
-                DispatchQueue.main.async {
-                    self?.onError?(error.localizedDescription)
-                }
+                self?.onStateChanged?(.error(error.localizedDescription))
             }
         }
     }

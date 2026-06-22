@@ -9,15 +9,15 @@ import UIKit
 import MapKit
 
 class AddPhotoViewController: UIViewController {
-
+    
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var photoNameLabel: UITextField!
     @IBOutlet weak var photoDetailLabel: UITextField!
     @IBOutlet weak var photoLocationLabel: UITextField!
     @IBOutlet weak var photoCityLabel: UITextField!
-
-    private let addPhotoViewModel = AddPhotoViewModel()
+    
+    private let viewModel = AddPhotoViewModel()
     var selectedCoordinate: CLLocationCoordinate2D?
     
     override func viewDidLoad() {
@@ -28,7 +28,7 @@ class AddPhotoViewController: UIViewController {
         let tapImage = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tap:)))
         imageView.addGestureRecognizer(tapImage)
         bindViewModel()
-
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
@@ -40,7 +40,7 @@ class AddPhotoViewController: UIViewController {
             view.frame.origin.y = -keyboardSize.height
         }
     }
-
+    
     @objc private func keyboardWillHide(notification: NSNotification) {
         view.frame.origin.y = 0
     }
@@ -54,7 +54,7 @@ class AddPhotoViewController: UIViewController {
         picker.allowsEditing = true
         present(picker, animated: true)
     }
-
+    
     @IBAction func photoAddButton(_ sender: Any) {
         print("ekle tıklandı")
         guard let image = imageView.image else {
@@ -67,8 +67,8 @@ class AddPhotoViewController: UIViewController {
         let location = photoLocationLabel.text ?? ""
         let city = photoCityLabel.text ?? ""
         
-        addPhotoViewModel.addPhoto(image: image, name: name, detail: detail, location: location, city: city,lat: selectedCoordinate?.latitude, lng: selectedCoordinate?.longitude
-)
+        viewModel.addPhoto(image: image, name: name, detail: detail, location: location, city: city,lat: selectedCoordinate?.latitude, lng: selectedCoordinate?.longitude
+        )
     }
     
     @IBAction func mapChooseButton(_ sender: Any) {
@@ -85,21 +85,28 @@ class AddPhotoViewController: UIViewController {
     }
     private func bindViewModel() {
         
-        addPhotoViewModel.onSuccess = { [weak self] in
-            guard let self else { return }
-            NotificationCenter.default.post(name: NSNotification.Name("PhotoAdded"), object: nil)
-            DispatchQueue.main.async {
-                self.navigationController?.popViewController(animated: true)
+        viewModel.onStateChanged = { [weak self] state in
+            switch state {
+            case .success:
+                self?.ekraniGuncelle()
+            case .error(let message):
+                print(message)
             }
         }
-        
-        addPhotoViewModel.onError = { error in
-            print("Hata: \(error)")
+    }
+    
+    
+    private func ekraniGuncelle() {
+        NotificationCenter.default.post(name: NSNotification.Name("PhotoAdded"), object: nil)
+        DispatchQueue.main.async {
+            self.navigationController?.popViewController(animated: true)
         }
     }
-        
-
+    
+    
 }
+    
+    
 
 extension AddPhotoViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     

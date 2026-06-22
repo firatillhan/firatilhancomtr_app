@@ -44,16 +44,26 @@ class PhotosViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        photoViewModel.onSuccess = { [weak self] in
-            guard let self else { return }
-            photoViewModel.addAllCities()
-            collectionView.reloadData()
-        }
         
-        photoViewModel.onError = { error in
-            print("Error: \(error)")
+        photoViewModel.onStateChanged = { state in
+            switch state {
+            case .success:
+                self.ekraniGuncelle()
+            case .error(let message):
+                print(message)
+            }
         }
     }
+    
+    
+    private func ekraniGuncelle() {
+        photoViewModel.addAllCities()
+        collectionView.reloadData()
+    }
+    
+    
+    
+    
     @IBAction func filterButtonPressed(_ sender: Any) {
         citiesTextField.becomeFirstResponder()
 
